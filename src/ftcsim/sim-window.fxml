@@ -4,6 +4,6 @@
 <?import javafx.scene.layout.Pane?>
 
 
-<Pane fx:controller="ftcsim.Controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="pane" fx:controller="ftcsim.Controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
    <Canvas fx:id="canvas" height="600.0" width="600.0" />
 </Pane>

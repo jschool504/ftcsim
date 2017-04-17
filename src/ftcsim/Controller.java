@@ -6,6 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -16,6 +20,9 @@ import java.util.TimerTask;
 public class Controller implements Initializable {
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private Pane pane;
 
     private final int physicsUpdateInterval = 15; // slightly faster than 60 times per second
 
@@ -28,11 +35,10 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         Image image = new Image(String.valueOf(getClass().getClassLoader().getResource("resources/vvmap.png")));
+        BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, null);
+        Background fieldBackground = new Background(null, backgroundImage);
         final GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.drawImage(image, 0, 0);
+        this.pane.setBackground(fieldBackground);
 
         // Animation update loop: we use different classes for the two loops for two reasons. AnimationTimer tries to
         // run the handle() method 60 times per second but does not guarantee that will be the case. Timer will run its
@@ -45,6 +51,8 @@ public class Controller implements Initializable {
 
             // Render loop
             public void handle(long currentTime) {
+                gc.clearRect(0, 0, 600, 600);
+                
                 for (Renderable obj : objects) {
                     obj.draw(gc);
                 }
@@ -54,6 +62,9 @@ public class Controller implements Initializable {
         // physics update loop
         new Timer().schedule(new TimerTask() {
             public void run() {
+
+                bot.setYSpeed(-2);
+
                 for (Renderable obj : objects) {
                     obj.update(physicsUpdateInterval);
                 }
