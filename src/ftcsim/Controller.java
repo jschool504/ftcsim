@@ -17,6 +17,8 @@ public class Controller implements Initializable {
     @FXML
     private Canvas canvas;
 
+    private final int physicsUpdateInterval = 15; // slightly faster than 60 times per second
+
     private Robot bot = new Robot(220, 560, 20);
 
     private Renderable[] objects = new Renderable[]{
@@ -32,6 +34,11 @@ public class Controller implements Initializable {
 
         gc.drawImage(image, 0, 0);
 
+        // Animation update loop: we use different classes for the two loops for two reasons. AnimationTimer tries to
+        // run the handle() method 60 times per second but does not guarantee that will be the case. Timer will run its
+        // run() method on the period you given it, int this case, 10ms. Also, by seperating the two loops it is
+        // possible to ensure that a change in the FPS does not affect the speed at which the physics calulcations
+        // appear to be occurring.
         new AnimationTimer() {
 
             private long oldTime;
@@ -43,14 +50,15 @@ public class Controller implements Initializable {
                 }
             }
         }.start();
-        
+
+        // physics update loop
         new Timer().schedule(new TimerTask() {
             public void run() {
                 for (Renderable obj : objects) {
-                    obj.update(10);
+                    obj.update(physicsUpdateInterval);
                 }
             }
-        }, 0, 10);
+        }, 0, physicsUpdateInterval);
     }
 
 }
